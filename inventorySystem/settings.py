@@ -106,7 +106,7 @@ DATABASES = {
         'NAME': 'stockmanagement_django_render',
         'USER': 'stockmanagement_django_render_user',
         'PASSWORD': 'EQBMdsLIyUBtrCYfa3TwOTBTPlvy5DGX',
-        'HOST': 'dpg-cnmhbjuv3ddc73fjug4g-a.frankfurt-postgres.render.com',
+        'HOST': 'postgres://stockmanagement_django_render_user:EQBMdsLIyUBtrCYfa3TwOTBTPlvy5DGX@dpg-cnmhbjuv3ddc73fjug4g-a/stockmanagement_django_render',
         'PORT': '5432',
          'OPTIONS': {
             'client_encoding': 'utf8',
