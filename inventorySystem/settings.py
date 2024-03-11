@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,8 +28,12 @@ SECRET_KEY='1i*lto=kq+!efwd*qajbu&^qwtkyoc8hg29gtbpbkqt0to@$ga'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG","False")=="true"
+allowed_hosts_string = os.environ.get("ALLOWED_HOSTS")
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+allowed_hosts = allowed_hosts_string.split(" ") if allowed_hosts_string else []
+
+ALLOWED_HOSTS = allowed_hosts + ['maraccia.onrender.com', 'localhost']
+
 
 
 
@@ -81,16 +85,25 @@ WSGI_APPLICATION = 'inventorySystem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+#DATABASES = {
+ #   'default': {
+  #      'ENGINE': 'django.db.backends.sqlite3',
+   #     'NAME': BASE_DIR / 'db.sqlite3',
+    #}
+#}
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'stockmanagement_django_render',
+        'USER': 'stockmanagement_django_render_user',
+        'PASSWORD': 'EQBMdsLIyUBtrCYfa3TwOTBTPlvy5DGX',
+        'HOST': 'dpg-cnmhbjuv3ddc73fjug4g-a.frankfurt-postgres.render.com',
+        'PORT': '5432',
+         'OPTIONS': {
+            'client_encoding': 'utf8',
+        },
     }
 }
-database_url = os.environ.get("DATABASE_URL")
-
-DATABASES["default"]=dj_database_url.parse(database_url)
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
