@@ -27,7 +27,7 @@ SECRET_KEY='1i*lto=kq+!efwd*qajbu&^qwtkyoc8hg29gtbpbkqt0to@$ga'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG","False")=="true"
+DEBUG = True
 allowed_hosts_string = os.environ.get("ALLOWED_HOSTS")
 
 allowed_hosts = allowed_hosts_string.split(" ") if allowed_hosts_string else []
@@ -91,26 +91,24 @@ WSGI_APPLICATION = 'inventorySystem.wsgi.application'
    #     'NAME': BASE_DIR / 'db.sqlite3',
     #}
 #}
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+'''
 
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'stockmanagement_django_render',
         'USER': 'stockmanagement_django_render_user',
         'PASSWORD': 'EQBMdsLIyUBtrCYfa3TwOTBTPlvy5DGX',
-        'HOST': 'postgres://stockmanagement_django_render_user:EQBMdsLIyUBtrCYfa3TwOTBTPlvy5DGX@dpg-cnmhbjuv3ddc73fjug4g-a/stockmanagement_django_render',
+        'HOST': 'dpg-cnmhbjuv3ddc73fjug4g-a.frankfurt-postgres.render.com',
         'PORT': '5432',
-         'OPTIONS': {
-            'client_encoding': 'utf8',
-        },
     }
 }
 
