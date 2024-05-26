@@ -24,7 +24,6 @@ def per_product_view(request, pk):
     context = {
         'inventory': inventory
     }
-
     return render(request, "inventory/per_product.html", context=context)
 
 @login_required
@@ -36,7 +35,6 @@ def add_product(request):
             new_inventory.sales = float(add_form.cleaned_data['cost_per_item']) * float(add_form.cleaned_data['quantity_sold'])
             new_inventory.save()
             messages.success(request, "Ürün Ekleme Başarılı")
-            return redirect("/inventory/")
             return redirect("inventory_list")
     else:
         add_form = AddInventoryForm()
@@ -49,7 +47,7 @@ def delete_inventory(request, pk):
     inventory= get_object_or_404(Inventory, pk=pk)
     inventory.delete()
     messages.error(request, "Ürün Silindi")
-    return redirect("/inventory/")
+    return redirect("inventory_list")
 
 @login_required
 def update_inventory(request, pk):
@@ -64,8 +62,7 @@ def update_inventory(request, pk):
             inventory.sales = float(inventory.cost_per_item)*float(inventory.quantity_sold)
             inventory.save()
             messages.success(request, "Ürün Güncelleme Başarılı")
-            return redirect("/inventory/")
-            return redirect(reverse('per_product', kwargs={'pk': pk}))
+            return redirect("inventory_list")
         
     else:
         updateForm=UpdateInventoryForm(instance=inventory)
@@ -80,27 +77,25 @@ def dashboard(request):
 
     sales_graph = df.groupby(by="last_sale_date", as_index=False, sort=False)['sales'].sum()
     sales_graph = px.line(sales_graph, x="last_sale_date", y="sales", title="Sales Trend")
-    sales_graph = json.dumps(sales_graph, cls=plotly.utils.PlotlyJSONEncoder)  # Düzeltme burada
+    sales_graph = sales_graph.to_html(full_html=False, include_plotlyjs=False)  # Düzeltme burada
 
     best_performing_product_df = df.groupby(by="name").sum().sort_values(by="quantity_sold")
     best_performing_product = px.bar(
-    best_performing_product_df,
-    x=best_performing_product_df.index,
-    y='quantity_sold',  # quantity_sold sütunu
-    title="Best Performing Product"
-)
-    best_performing_product = json.dumps(best_performing_product,cls=plotly.utils.PlotlyJSONEncoder)
-
+        best_performing_product_df,
+        x=best_performing_product_df.index,
+        y='quantity_sold',  # quantity_sold sütunu
+        title="Best Performing Product"
+    )
+    best_performing_product = best_performing_product.to_html(full_html=False, include_plotlyjs=False)
 
     most_product_in_stock_df = df.groupby(by="name").sum().sort_values(by="quantity_in_stock")
     most_product_in_stock = px.pie(most_product_in_stock_df,
-                                   names = most_product_in_stock_df.index,
-                                   values= most_product_in_stock_df.quantity_in_stock,
+                                   names=most_product_in_stock_df.index,
+                                   values=most_product_in_stock_df.quantity_in_stock,
                                    title="Most Product In Stock"
                                    )
-    
-    most_product_in_stock=json.dumps(most_product_in_stock, cls=plotly.utils.PlotlyJSONEncoder)
 
+    most_product_in_stock = most_product_in_stock.to_html(full_html=False, include_plotlyjs=False)
 
     context = {
         "sales_graph": sales_graph,
@@ -108,8 +103,4 @@ def dashboard(request):
         "most_product_in_stock": most_product_in_stock
     }
 
-
     return render(request, "inventory/dashboard.html", context=context)
-
-    
-

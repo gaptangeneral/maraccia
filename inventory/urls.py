@@ -7,4 +7,5 @@ urlpatterns = [
      path("delete/<int:pk>", delete_inventory, name="delete_inventory"),
      path("update/<int:pk>", update_inventory, name="update_inventory"),
      path('dashboard/', dashboard, name='dashboard')
+     
 ]
